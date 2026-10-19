@@ -1,0 +1,498 @@
+/* ==========================================
+   1. VARIABLES GLOBALES Y TEMAS
+   ========================================== */
+:root {
+  --primary-color: #1b365d;       /* Azul Institucional */
+  --primary-hover: #12243e;
+  --accent-color: #e65100;        /* Naranja Construcción */
+  --accent-hover: #c63f00;
+  --bg-color: #f4f6f8;            /* Gris de Fondo */
+  --card-bg: #ffffff;
+  --text-color: #212529;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  
+  /* Estados de Stock */
+  --stock-ok: #2e7d32;
+  --stock-low: #ed6c02;
+  --stock-out: #d32f2f;
+  
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --border-radius: 8px;
+}
+
+/* ==========================================
+   2. RESETEO BÁSICO Y GENERAL
+   ========================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* ==========================================
+   3. ENCABEZADO Y NAVEGACIÓN
+   ========================================== */
+.main-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand h1 {
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.brand .tagline {
+  font-size: 0.85rem;
+  color: #b0bec5;
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  align-items: center;
+}
+
+.main-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius);
+  transition: background 0.3s;
+}
+
+.main-nav a:hover, 
+.main-nav a.active {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-login {
+  background-color: var(--accent-color);
+}
+
+.btn-login:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+/* ==========================================
+   4. ESTRUCTURA GENERAL Y COMPONENTES
+   ========================================== */
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.card {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Botones Base */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+  border: 2px solid var(--accent-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.btn-sm:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-block {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* ==========================================
+   5. VISTA DE INICIO (INDEX / HERO BANNER)
+   ========================================== */
+.hero-banner {
+  background: linear-gradient(135deg, #1b365d 0%, #2c5282 100%);
+  color: white;
+  padding: 2.5rem 2rem;
+  border: none;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* Evita que los párrafos se solapen con los botones */
+}
+
+.hero-content h2 {
+  font-size: 2rem;
+  color: #ffffff;
+  margin: 0;
+}
+
+.hero-content p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+  margin: 0;
+  max-width: 850px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.hero-banner .btn-secondary {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.hero-banner .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.service-card h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.service-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--accent-color);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.service-link:hover {
+  text-decoration: underline;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* ==========================================
+   6. VISTA DE CATÁLOGO Y BÚSQUEDA DE STOCK
+   ========================================== */
+.search-form {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.form-group input, 
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.product-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background-color: #e0e0e0;
+  object-fit: contain;       /* Muestra la imagen COMPLETA sin recortar nada */
+  object-position: center;
+}
+
+.product-info {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.product-info .category {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.product-info h4 {
+  font-size: 1.1rem;
+  margin: 0.25rem 0;
+}
+
+.product-info .sku {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.product-info .price {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-top: auto;
+}
+
+/* Badges de Estado de Stock */
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: white;
+  border-radius: 12px;
+}
+
+.stock-ok { background-color: var(--stock-ok); }
+.stock-low { background-color: var(--stock-low); }
+.stock-out { background-color: var(--stock-out); }
+
+/* ==========================================
+   7. DETALLE DE PRODUCTO
+   ========================================== */
+.btn-back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.product-detail-card {
+  background: white;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
+}
+
+.detail-gallery img {
+  width: 100%;
+  border-radius: var(--border-radius);
+  object-fit: cover;
+}
+
+.price-box {
+  margin: 1rem 0;
+}
+
+.price-box .price {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.tax-info {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-left: 0.5rem;
+}
+
+.stock-status-box {
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1.5rem;
+}
+
+.stock-low-box {
+  background-color: #fff3e0;
+  border-left: 4px solid var(--stock-low);
+}
+
+.specs-section {
+  margin: 1.5rem 0;
+}
+
+.specs-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.specs-section li {
+  padding: 0.4rem 0;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+/* ==========================================
+   8. PUNTO DE VENTA (POS MESÓN), TABLAS Y LOGIN
+   ========================================== */
+.pos-layout {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 1.5rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.table th, .table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.table th {
+  background-color: #f8f9fa;
+}
+
+.alert-card {
+  border-left: 5px solid var(--stock-low);
+}
+
+.alert-list {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.login-container {
+  max-width: 450px;
+  margin: 3rem auto;
+}
+
+/* ==========================================
+   9. PIE DE PÁGINA (FOOTER)
+   ========================================== */
+.main-footer {
+  background-color: var(--primary-color);
+  color: #cfd8dc;
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+}
+
+/* ==========================================
+   10. MEDIA QUERIES (RESPONSIVE / MÓVILES)
+   ========================================== */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .main-nav ul {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .search-form {
+    flex-direction: column;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  .product-detail-card, 
+  .pos-layout {
+    grid-template-columns: 1fr;
+  }
+}

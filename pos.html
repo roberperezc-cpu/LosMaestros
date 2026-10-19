@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ventas Mesón - Ferretería Los Maestros</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="header-container">
+      <div class="brand">
+        <h1>Ferretería Los Maestros</h1>
+        <p class="tagline">Módulo de Atención en Mesón (Vendedor)</p>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html">Consulta de Stock</a></li>
+          <li><a href="pos.html" class="active">Ventas Mesón</a></li>
+          <li><a href="admin.html">Panel Admin</a></li>
+          <li><a href="login.html" class="btn-login">Acceso Contratista</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container pos-layout">
+    <!-- Panel Izquierdo: Selección de Productos -->
+    <section class="card pos-products">
+      <h2>Registrar Nueva Venta</h2>
+      <div class="form-group">
+        <input type="text" placeholder="Ingresar SKU o nombre de producto...">
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MAT-CEM-001</td>
+            <td>Saco Cemento Melón 25kg</td>
+            <td>$4.890</td>
+            <td>142</td>
+            <td><button class="btn-sm">+ Agregar</button></td>
+          </tr>
+          <tr>
+            <td>HER-TAL-042</td>
+            <td>Taladro Percutor Makita</td>
+            <td>$58.990</td>
+            <td>3</td>
+            <td><button class="btn-sm">+ Agregar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Panel Derecho: Ticket de Venta -->
+    <section class="card pos-cart">
+      <h2>Detalle de Venta</h2>
+      <div class="form-group">
+        <label for="client-type">Tipo de Cliente:</label>
+        <select id="client-type">
+          <option value="particular">Cliente Particular (Efectivo/Tarjeta)</option>
+          <option value="contratista">Contratista (Cuenta Corriente)</option>
+        </select>
+      </div>
+
+      <div class="cart-items">
+        <div class="cart-item">
+          <span>Saco Cemento Melón x 10</span>
+          <strong>$48.900</strong>
+        </div>
+      </div>
+
+      <div class="cart-totals">
+        <p>Subtotal Neto: <span>$41.092 CLP</span></p>
+        <p>19% IVA: <span>$7.808 CLP</span></p>
+        <h3>Total a Pagar: <span>$48.900 CLP</span></h3>
+      </div>
+
+      <button class="btn btn-primary btn-block">Confirmar y Registrar Venta</button>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-container">
+      <p>&copy; 2026 Ferretería Los Maestros. Módulo de Terminal Punto de Venta.</p>
+    </div>
+  </footer>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
