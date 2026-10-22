@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Layout from '../components/organisms/Layout'
 import FormularioLogin from '../components/organisms/FormularioLogin'
 
@@ -17,6 +17,9 @@ function Login() {
           <h2>Portal Contratistas</h2>
           <p>Consulte el saldo de su Cuenta Corriente e historial de compras.</p>
           <FormularioLogin onLoginExitoso={manejarLoginExitoso} />
+          <p className="notice">
+            ¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link>
+          </p>
           <p className="notice">
             Usuarios de prueba: admin@losmaestros.cl / Admin123 · contratista@losmaestros.cl /
             Maestro123

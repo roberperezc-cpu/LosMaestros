@@ -94,3 +94,19 @@
   border: 1px solid #a5d6a7;
   color: #1b5e20;
 }
+
+/* Registro y checkbox de React Bootstrap */
+.registro-card {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.form-group .form-check-input {
+  width: auto;
+  margin-right: 0.5rem;
+}
+
+.form-group .form-check-label {
+  display: inline;
+  margin: 0;
+}

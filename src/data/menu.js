@@ -7,4 +7,6 @@ export const itemsBase = [
 
 export const itemPanelAdmin = { to: '/admin', label: 'Panel Admin' }
 
+export const itemPerfil = { to: '/perfil', label: 'Mi Perfil' }
+
 export const itemAcceso = { to: '/login', label: 'Acceso Contratista', className: 'btn-login' }

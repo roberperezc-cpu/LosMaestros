@@ -1,16 +1,15 @@
-import usuarios from '../data/usuarios'
+import { obtenerTodosLosUsuarios, quitarPassword } from './usuarios'
 
 const CLAVE_SESION = 'sesionLosMaestros'
 
 // Devuelve el usuario (sin contraseña) si las credenciales son correctas; si no, null.
+// Busca entre los usuarios estáticos y los creados desde el registro.
 export function autenticar(correo, password) {
-  const usuario = usuarios.find(
+  const usuario = obtenerTodosLosUsuarios().find(
     (u) => u.correo === correo.trim().toLowerCase() && u.password === password,
   )
 
-  if (!usuario) return null
-
-  return { id: usuario.id, nombre: usuario.nombre, correo: usuario.correo, rol: usuario.rol }
+  return usuario ? quitarPassword(usuario) : null
 }
 
 export function guardarSesion(usuario) {
