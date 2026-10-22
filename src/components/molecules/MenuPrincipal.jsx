@@ -6,7 +6,12 @@ function MenuPrincipal({ items }) {
       <ul>
         {items.map((item) => (
           <li key={item.to}>
-            <EnlaceMenu to={item.to} label={item.label} className={item.className} />
+            <EnlaceMenu
+              to={item.to}
+              label={item.label}
+              className={item.className}
+              onClick={item.onClick}
+            />
           </li>
         ))}
       </ul>

@@ -11,19 +11,30 @@ npm test         # tests (Vitest + Testing Library)
 npm run lint
 ```
 
-## Estructura
+## Estructura (Atomic Design)
 ```text
 src/
-├── main.jsx / App.jsx        # entrada y rutas (react-router-dom)
-├── styles/styles.css         # tus estilos originales, intactos
-├── styles/extras.css         # reemplaza los style="" inline del HTML
-├── data/                     # productos, categorías, menú, contratistas
-├── utils/                    # estado de stock, filtros, formato de precio
-├── components/               # Header, Footer, Layout, TarjetaProducto, ...
-└── pages/                    # Inicio, Catalogo, DetalleProducto, POS, Admin, Login
+├── main.jsx / App.jsx          # entrada, rutas y estado de productos
+├── styles/                     # styles.css (original, intacto) + extras.css
+├── data/                       # productos, categorías, menú, servicios, contratistas
+├── utils/                      # estado de stock, filtros, formato de precio
+├── components/
+│   ├── atoms/                  # Boton, BotonEnlace, Entrada, Selector, Precio, InsigniaStock, ...
+│   ├── molecules/              # CampoFormulario, TarjetaProducto, MenuPrincipal, CajaStock, ...
+│   └── organisms/              # Header, Footer, Layout, Hero, FiltroCatalogo, DetalleVenta, ...
+├── routes/                     # RutaPrivada (protege /admin)
+└── pages/                      # Inicio, Catalogo, DetalleProducto, POS, Admin, Login, NoEncontrada
 ```
 
 ## Rutas
-`/` · `/catalogo` · `/catalogo/:id` · `/pos` · `/admin` · `/login`
+`/` · `/catalogo` · `/catalogo/:id` · `/pos` · `/admin` (privada, solo rol admin) · `/login`
 
-Pendiente (igual que en la versión HTML): login real, "Confirmar venta", "Ver Historial".
+## Usuarios de prueba (credenciales estáticas)
+| Rol | Correo | Contraseña |
+|---|---|---|
+| admin | admin@losmaestros.cl | Admin123 |
+| contratista | contratista@losmaestros.cl | Maestro123 |
+
+La sesión se guarda en `localStorage` (clave `sesionLosMaestros`).
+
+Pendiente: "Confirmar venta", "Ver Historial".

@@ -8,6 +8,7 @@ import POS from './pages/POS'
 import Admin from './pages/Admin'
 import Login from './pages/Login'
 import NoEncontrada from './pages/NoEncontrada'
+import RutaPrivada from './routes/RutaPrivada'
 import productosIniciales from './data/productos'
 
 function App() {
@@ -21,7 +22,14 @@ function App() {
       <Route path="/catalogo" element={<Catalogo productos={productos} />} />
       <Route path="/catalogo/:id" element={<DetalleProducto productos={productos} />} />
       <Route path="/pos" element={<POS productos={productos} />} />
-      <Route path="/admin" element={<Admin productos={productos} />} />
+      <Route
+        path="/admin"
+        element={
+          <RutaPrivada rolRequerido="admin">
+            <Admin productos={productos} />
+          </RutaPrivada>
+        }
+      />
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<NoEncontrada />} />
     </Routes>

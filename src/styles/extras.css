@@ -51,3 +51,27 @@
   color: var(--text-muted);
   padding: 1rem 0;
 }
+
+/* Formularios con React Bootstrap (sin cargar el CSS completo de Bootstrap) */
+.invalid-feedback {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--stock-out);
+}
+
+.form-control.is-invalid {
+  border-color: var(--stock-out);
+}
+
+.alert {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.alert-danger {
+  background-color: #ffebee;
+  border: 1px solid #ef9a9a;
+  color: #b71c1c;
+}
