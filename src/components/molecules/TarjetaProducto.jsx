@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom'
-import { obtenerEstadoStock } from '../utils/stock'
-import { formatearPrecio } from '../utils/formato'
+import InsigniaStock from '../atoms/InsigniaStock'
+import Precio from '../atoms/Precio'
+import BotonEnlace from '../atoms/BotonEnlace'
 
 function TarjetaProducto({ producto }) {
-  const estado = obtenerEstadoStock(producto)
   const urlDetalle = `/catalogo/${producto.id}`
-  const claseBoton = `btn-sm btn-detalle${producto.stock === 0 ? ' btn-detalle-agotado' : ''}`
+  const claseExtra = producto.stock === 0 ? 'btn-detalle-agotado' : ''
 
   return (
     <article className="product-card">
-      <div className={`badge ${estado.clase}`}>{estado.texto}</div>
+      <InsigniaStock producto={producto} />
 
       <Link to={urlDetalle}>
         <img src={producto.imagen} alt={producto.nombre} />
@@ -21,11 +21,13 @@ function TarjetaProducto({ producto }) {
           <Link to={urlDetalle} className="enlace-producto">{producto.nombre}</Link>
         </h4>
         <p className="sku">SKU: {producto.id}</p>
-        <p className="price">{formatearPrecio(producto.precio)} CLP</p>
+        <Precio valor={producto.precio} />
         <p className="stock-count">
           Disponible: <strong>{producto.stock} unidades</strong>
         </p>
-        <Link to={urlDetalle} className={claseBoton}>Ver Detalle</Link>
+        <BotonEnlace to={urlDetalle} variante="pequeno" className={claseExtra}>
+          Ver Detalle
+        </BotonEnlace>
       </div>
     </article>
   )

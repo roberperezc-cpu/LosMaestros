@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import CampoFormulario from '../molecules/CampoFormulario'
+import Entrada from '../atoms/Entrada'
+import Boton from '../atoms/Boton'
 
 function FormularioLogin() {
   const [formulario, setFormulario] = useState({ rut: '', password: '' })
@@ -10,15 +13,13 @@ function FormularioLogin() {
 
   const manejarSubmit = (event) => {
     event.preventDefault()
-    // Pendiente: autenticación real cuando exista backend.
+    // Pendiente (paso 2): validar credenciales estáticas y guardar sesión en localStorage.
   }
 
   return (
     <form onSubmit={manejarSubmit}>
-      <div className="form-group">
-        <label htmlFor="rut">RUT Contratista o Empresa:</label>
-        <input
-          type="text"
+      <CampoFormulario id="rut" label="RUT Contratista o Empresa:">
+        <Entrada
           id="rut"
           name="rut"
           placeholder="12.345.678-K"
@@ -26,22 +27,21 @@ function FormularioLogin() {
           onChange={manejarCambio}
           required
         />
-      </div>
+      </CampoFormulario>
 
-      <div className="form-group">
-        <label htmlFor="password">Contraseña:</label>
-        <input
-          type="password"
+      <CampoFormulario id="password" label="Contraseña:">
+        <Entrada
           id="password"
+          type="password"
           name="password"
           placeholder="••••••••"
           value={formulario.password}
           onChange={manejarCambio}
           required
         />
-      </div>
+      </CampoFormulario>
 
-      <button type="submit" className="btn btn-primary btn-block">Ingresar al Portal</button>
+      <Boton type="submit" bloque>Ingresar al Portal</Boton>
     </form>
   )
 }

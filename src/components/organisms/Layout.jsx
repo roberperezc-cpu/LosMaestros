@@ -1,6 +1,6 @@
 import Header from './Header'
 import Footer from './Footer'
-import itemsMenu from '../data/menu'
+import itemsMenu from '../../data/menu'
 
 // Marco común de todas las páginas: encabezado + contenido + pie.
 // Cada página define su propio <main> (las clases varían: container, pos-layout, etc.).

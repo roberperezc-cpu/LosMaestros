@@ -1,4 +1,8 @@
-import categorias from '../data/categorias'
+import CampoFormulario from '../molecules/CampoFormulario'
+import Entrada from '../atoms/Entrada'
+import Selector from '../atoms/Selector'
+import Boton from '../atoms/Boton'
+import categorias from '../../data/categorias'
 
 function FiltroCatalogo({ texto, categoria, onTextoChange, onCategoriaChange }) {
   return (
@@ -8,17 +12,16 @@ function FiltroCatalogo({ texto, categoria, onTextoChange, onCategoriaChange }) 
 
       {/* El filtrado es en vivo; el submit solo evita recargar la página */}
       <form className="search-form" id="search-form" onSubmit={(e) => e.preventDefault()}>
-        <div className="form-group">
-          <input
-            type="text"
+        <CampoFormulario>
+          <Entrada
             id="search-input"
             placeholder="Buscar por código, nombre o categoría (ej: Cemento, Taladro)..."
             value={texto}
             onChange={(e) => onTextoChange(e.target.value)}
           />
-        </div>
-        <div className="form-group">
-          <select
+        </CampoFormulario>
+        <CampoFormulario>
+          <Selector
             id="category-filter"
             value={categoria}
             onChange={(e) => onCategoriaChange(e.target.value)}
@@ -27,9 +30,9 @@ function FiltroCatalogo({ texto, categoria, onTextoChange, onCategoriaChange }) 
             {categorias.map((cat) => (
               <option key={cat.value} value={cat.value}>{cat.label}</option>
             ))}
-          </select>
-        </div>
-        <button type="submit" className="btn btn-primary">Buscar Stock</button>
+          </Selector>
+        </CampoFormulario>
+        <Boton type="submit">Buscar Stock</Boton>
       </form>
     </section>
   )

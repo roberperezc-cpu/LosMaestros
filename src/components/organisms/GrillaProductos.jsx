@@ -1,6 +1,6 @@
-import TarjetaProducto from './TarjetaProducto'
+import TarjetaProducto from '../molecules/TarjetaProducto'
 
-function ListaProductos({ productos = [] }) {
+function GrillaProductos({ productos = [] }) {
   return (
     <div className="product-grid" id="product-grid">
       {productos.length === 0 ? (
@@ -14,4 +14,4 @@ function ListaProductos({ productos = [] }) {
   )
 }
 
-export default ListaProductos
+export default GrillaProductos

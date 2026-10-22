@@ -13,26 +13,30 @@ const productoMock = {
   imagen: 'taladro.jpg',
 }
 
+function renderizarTarjeta() {
+  return render(
+    <MemoryRouter>
+      <TarjetaProducto producto={productoMock} />
+    </MemoryRouter>,
+  )
+}
+
 describe('TarjetaProducto', () => {
   it('muestra nombre, SKU y badge de Bajo Stock', () => {
-    render(
-      <MemoryRouter>
-        <TarjetaProducto producto={productoMock} />
-      </MemoryRouter>,
-    )
+    // Arrange + Act
+    renderizarTarjeta()
 
+    // Assert
     expect(screen.getByText('Taladro Percutor 710W Makita')).toBeInTheDocument()
     expect(screen.getByText('SKU: HER-TAL-042')).toBeInTheDocument()
     expect(screen.getByText('Bajo Stock')).toHaveClass('badge', 'stock-low')
   })
 
   it('el botón "Ver Detalle" lleva a /catalogo/:id', () => {
-    render(
-      <MemoryRouter>
-        <TarjetaProducto producto={productoMock} />
-      </MemoryRouter>,
-    )
+    // Arrange + Act
+    renderizarTarjeta()
 
+    // Assert
     expect(screen.getByRole('link', { name: 'Ver Detalle' })).toHaveAttribute(
       'href',
       '/catalogo/HER-TAL-042',
