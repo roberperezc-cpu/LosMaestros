@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import CampoValidado from '../molecules/CampoValidado'
-import regiones from '../../data/regiones'
+import CamposRegionComuna from '../molecules/CamposRegionComuna'
 import tiposCliente from '../../data/tiposCliente'
 import { validarRegistro } from '../../utils/validaciones'
 import { obtenerTodosLosUsuarios, registrarUsuario } from '../../utils/usuarios'
@@ -24,9 +24,6 @@ const FORMULARIO_VACIO = {
 function FormularioRegistro({ onRegistroExitoso }) {
   const [formulario, setFormulario] = useState(FORMULARIO_VACIO)
   const [errores, setErrores] = useState({})
-
-  const regionSeleccionada = regiones.find((r) => r.value === formulario.region)
-  const comunas = regionSeleccionada ? regionSeleccionada.comunas : []
 
   const manejarCambio = (event) => {
     const { name, value, type, checked } = event.target
@@ -111,36 +108,13 @@ function FormularioRegistro({ onRegistroExitoso }) {
           ))}
         </CampoValidado>
 
-        <CampoValidado
-          id="region"
-          label="Región:"
-          as="select"
-          name="region"
-          value={formulario.region}
+        <CamposRegionComuna
+          region={formulario.region}
+          comuna={formulario.comuna}
+          errorRegion={errores.region}
+          errorComuna={errores.comuna}
           onChange={manejarCambio}
-          error={errores.region}
-        >
-          <option value="">Selecciona una región</option>
-          {regiones.map((region) => (
-            <option key={region.value} value={region.value}>{region.label}</option>
-          ))}
-        </CampoValidado>
-
-        <CampoValidado
-          id="comuna"
-          label="Comuna:"
-          as="select"
-          name="comuna"
-          value={formulario.comuna}
-          onChange={manejarCambio}
-          error={errores.comuna}
-          disabled={!formulario.region}
-        >
-          <option value="">Selecciona una comuna</option>
-          {comunas.map((comuna) => (
-            <option key={comuna} value={comuna}>{comuna}</option>
-          ))}
-        </CampoValidado>
+        />
 
         <CampoValidado
           id="password"

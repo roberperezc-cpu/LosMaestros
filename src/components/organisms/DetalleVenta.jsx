@@ -3,13 +3,11 @@ import Selector from '../atoms/Selector'
 import Boton from '../atoms/Boton'
 import ItemCarrito from '../molecules/ItemCarrito'
 import ResumenTotales from '../molecules/ResumenTotales'
-
-const IVA = 1.19
+import { desglosarTotal } from '../../utils/carrito'
 
 function DetalleVenta({ carrito, tipoCliente, onTipoClienteChange }) {
-  const total = carrito.reduce((suma, item) => suma + item.precio * item.cantidad, 0)
-  const neto = Math.round(total / IVA)
-  const iva = total - neto
+  const subtotal = carrito.reduce((suma, item) => suma + item.precio * item.cantidad, 0)
+  const { neto, iva, total } = desglosarTotal(subtotal)
 
   return (
     <section className="card pos-cart">

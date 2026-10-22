@@ -37,3 +37,21 @@ describe('construirMenu', () => {
     expect(etiquetas(items)).not.toContain('Panel Admin')
   })
 })
+
+describe('construirMenu (carrito)', () => {
+  it('muestra "Carrito" sin cantidad cuando está vacío', () => {
+    // Arrange + Act
+    const items = construirMenu(null, () => {}, 0)
+
+    // Assert
+    expect(items.map((item) => item.label)).toContain('Carrito')
+  })
+
+  it('muestra la cantidad de unidades cuando hay productos', () => {
+    // Arrange + Act
+    const items = construirMenu(null, () => {}, 3)
+
+    // Assert
+    expect(items.map((item) => item.label)).toContain('Carrito (3)')
+  })
+})

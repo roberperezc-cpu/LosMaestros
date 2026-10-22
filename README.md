@@ -27,7 +27,7 @@ src/
 ```
 
 ## Rutas
-`/` · `/catalogo` · `/catalogo/:id` · `/pos` · `/admin` (privada, solo rol admin) · `/login` · `/registro` · `/perfil` (privada, requiere sesión)
+`/` · `/catalogo` · `/catalogo/:id` · `/pos` · `/admin` (privada, solo rol admin) · `/login` · `/carrito` · `/registro` · `/perfil` (privada, requiere sesión)
 
 ## Usuarios de prueba (credenciales estáticas)
 | Rol | Correo | Contraseña |
@@ -41,3 +41,6 @@ La sesión se guarda en `localStorage` (clave `sesionLosMaestros`). Los usuarios
 Desde `/admin` se pueden crear productos (SKU, nombre, categoría, precio, stock, stock mínimo, ubicación y marca). Se guardan solo en memoria (se pierden al recargar) y usan una imagen genérica.
 
 Pendiente: "Confirmar venta", "Ver Historial".
+
+## Carrito de compras
+Desde el catálogo o el detalle se agregan productos al carrito (`/carrito`). El checkout valida RUT, teléfono, tipo de entrega y método de pago; al confirmar descuenta el stock en memoria y vacía el carrito.

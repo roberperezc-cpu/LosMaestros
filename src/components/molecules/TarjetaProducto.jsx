@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom'
 import InsigniaStock from '../atoms/InsigniaStock'
 import Precio from '../atoms/Precio'
 import BotonEnlace from '../atoms/BotonEnlace'
+import Boton from '../atoms/Boton'
 
-function TarjetaProducto({ producto }) {
+function TarjetaProducto({ producto, onAgregarAlCarrito }) {
   const urlDetalle = `/catalogo/${producto.id}`
   const claseExtra = producto.stock === 0 ? 'btn-detalle-agotado' : ''
 
@@ -28,6 +29,16 @@ function TarjetaProducto({ producto }) {
         <BotonEnlace to={urlDetalle} variante="pequeno" className={claseExtra}>
           Ver Detalle
         </BotonEnlace>
+        {onAgregarAlCarrito && (
+          <Boton
+            variante="pequeno"
+            className="btn-agregar"
+            disabled={producto.stock === 0}
+            onClick={() => onAgregarAlCarrito(producto)}
+          >
+            {producto.stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
+          </Boton>
+        )}
       </div>
     </article>
   )

@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import TarjetaProducto from './TarjetaProducto'
 
 const productoMock = {
@@ -41,5 +41,41 @@ describe('TarjetaProducto', () => {
       'href',
       '/catalogo/HER-TAL-042',
     )
+  })
+})
+
+describe('TarjetaProducto (carrito)', () => {
+  it('el botón "Agregar al carrito" llama a la función con el producto', () => {
+    // Arrange
+    const onAgregar = vi.fn()
+    render(
+      <MemoryRouter>
+        <TarjetaProducto producto={productoMock} onAgregarAlCarrito={onAgregar} />
+      </MemoryRouter>,
+    )
+
+    // Act
+    fireEvent.click(screen.getByRole('button', { name: 'Agregar al carrito' }))
+
+    // Assert
+    expect(onAgregar).toHaveBeenCalledWith(productoMock)
+  })
+
+  it('con stock 0 el botón está deshabilitado', () => {
+    // Arrange
+    render(
+      <MemoryRouter>
+        <TarjetaProducto
+          producto={{ ...productoMock, stock: 0 }}
+          onAgregarAlCarrito={vi.fn()}
+        />
+      </MemoryRouter>,
+    )
+
+    // Act
+    const boton = screen.getByRole('button', { name: 'Sin stock' })
+
+    // Assert
+    expect(boton).toBeDisabled()
   })
 })

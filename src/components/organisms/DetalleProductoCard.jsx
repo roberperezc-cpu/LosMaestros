@@ -1,9 +1,10 @@
 import Precio from '../atoms/Precio'
 import BotonEnlace from '../atoms/BotonEnlace'
+import Boton from '../atoms/Boton'
 import CajaStock from '../molecules/CajaStock'
 import ListaEspecificaciones from '../molecules/ListaEspecificaciones'
 
-function DetalleProductoCard({ producto }) {
+function DetalleProductoCard({ producto, onAgregarAlCarrito }) {
   return (
     <section className="product-detail-card" id="product-detail-container">
       <div className="detail-gallery">
@@ -24,6 +25,15 @@ function DetalleProductoCard({ producto }) {
         <ListaEspecificaciones especificaciones={producto.especificaciones} />
 
         <div className="detail-actions">
+          {onAgregarAlCarrito && (
+            <Boton
+              bloque
+              disabled={producto.stock === 0}
+              onClick={() => onAgregarAlCarrito(producto)}
+            >
+              {producto.stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
+            </Boton>
+          )}
           <p className="notice">
             * Para reservar stock o cargar a su Cuenta Corriente, inicie sesión como Contratista.
           </p>

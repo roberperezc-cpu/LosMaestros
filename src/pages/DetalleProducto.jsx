@@ -3,7 +3,7 @@ import Layout from '../components/organisms/Layout'
 import DetalleProductoCard from '../components/organisms/DetalleProductoCard'
 import BotonEnlace from '../components/atoms/BotonEnlace'
 
-function DetalleProducto({ productos }) {
+function DetalleProducto({ productos, onAgregarAlCarrito }) {
   const { id } = useParams()
   const producto = productos.find((p) => p.id === id)
 
@@ -13,7 +13,7 @@ function DetalleProducto({ productos }) {
         {producto ? (
           <>
             <BotonEnlace to="/catalogo" variante="volver">&larr; Volver al catálogo</BotonEnlace>
-            <DetalleProductoCard producto={producto} />
+            <DetalleProductoCard producto={producto} onAgregarAlCarrito={onAgregarAlCarrito} />
           </>
         ) : (
           <section className="card">

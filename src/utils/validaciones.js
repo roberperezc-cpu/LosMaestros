@@ -165,3 +165,37 @@ export function validarRegistro(datos, usuarios = []) {
 
   return errores
 }
+
+// ---------- Checkout (carrito de compras) ----------
+// Con retiro en tienda no se piden región, comuna ni dirección.
+export function validarCheckout(datos) {
+  const errores = {}
+
+  if (datos.nombre.trim().length < 3) {
+    errores.nombre = 'El nombre debe tener al menos 3 caracteres.'
+  }
+
+  const errorRut = validarRut(datos.rut)
+  if (errorRut) errores.rut = errorRut
+
+  const errorTelefono = validarTelefono(datos.telefono)
+  if (errorTelefono) errores.telefono = errorTelefono
+
+  if (!datos.tipoEntrega) {
+    errores.tipoEntrega = 'Selecciona cómo quieres recibir tu pedido.'
+  }
+
+  if (datos.tipoEntrega === 'despacho') {
+    if (!datos.region) errores.region = 'Selecciona una región.'
+    if (!datos.comuna) errores.comuna = 'Selecciona una comuna.'
+    if (datos.direccion.trim().length < 5) {
+      errores.direccion = 'Ingresa la dirección de despacho (calle y número).'
+    }
+  }
+
+  if (!datos.metodoPago) {
+    errores.metodoPago = 'Selecciona un método de pago.'
+  }
+
+  return errores
+}

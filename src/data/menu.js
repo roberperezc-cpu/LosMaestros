@@ -5,6 +5,8 @@ export const itemsBase = [
   { to: '/pos', label: 'Ventas Mesón' },
 ]
 
+export const itemCarrito = { to: '/carrito', label: 'Carrito' }
+
 export const itemPanelAdmin = { to: '/admin', label: 'Panel Admin' }
 
 export const itemPerfil = { to: '/perfil', label: 'Mi Perfil' }
