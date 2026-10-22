@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
-import Layout from '../components/Layout'
+import Layout from '../components/organisms/Layout'
+import BotonEnlace from '../components/atoms/BotonEnlace'
 
 function NoEncontrada() {
   return (
@@ -8,7 +8,7 @@ function NoEncontrada() {
         <section className="card">
           <h2>Página no encontrada</h2>
           <p>La dirección que buscas no existe.</p>
-          <Link to="/" className="btn-back">&larr; Volver al inicio</Link>
+          <BotonEnlace to="/" variante="volver">&larr; Volver al inicio</BotonEnlace>
         </section>
       </main>
     </Layout>

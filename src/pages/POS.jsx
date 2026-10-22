@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import Layout from '../components/Layout'
-import TablaProductosPOS from '../components/TablaProductosPOS'
-import DetalleVenta from '../components/DetalleVenta'
-import productos from '../data/productos'
+import Layout from '../components/organisms/Layout'
+import CampoFormulario from '../components/molecules/CampoFormulario'
+import Entrada from '../components/atoms/Entrada'
+import TablaProductosPOS from '../components/organisms/TablaProductosPOS'
+import DetalleVenta from '../components/organisms/DetalleVenta'
 
-function POS() {
+function POS({ productos }) {
   const [busqueda, setBusqueda] = useState('')
   const [carrito, setCarrito] = useState([])
   const [tipoCliente, setTipoCliente] = useState('particular')
@@ -44,14 +45,13 @@ function POS() {
       <main className="container pos-layout">
         <section className="card pos-products">
           <h2>Registrar Nueva Venta</h2>
-          <div className="form-group">
-            <input
-              type="text"
+          <CampoFormulario>
+            <Entrada
               placeholder="Ingresar SKU o nombre de producto..."
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
             />
-          </div>
+          </CampoFormulario>
 
           <TablaProductosPOS productos={productosFiltrados} onAgregar={agregarAlCarrito} />
         </section>

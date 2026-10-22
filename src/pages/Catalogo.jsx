@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import Layout from '../components/Layout'
-import FiltroCatalogo from '../components/FiltroCatalogo'
-import ListaProductos from '../components/ListaProductos'
-import productos from '../data/productos'
+import Layout from '../components/organisms/Layout'
+import FiltroCatalogo from '../components/organisms/FiltroCatalogo'
+import GrillaProductos from '../components/organisms/GrillaProductos'
 import { filtrarProductos } from '../utils/filtros'
 
-function Catalogo() {
+function Catalogo({ productos }) {
   const [texto, setTexto] = useState('')
   const [categoria, setCategoria] = useState('')
 
@@ -23,7 +22,7 @@ function Catalogo() {
 
         <section className="catalog-section">
           <h3>Catálogo de Productos Disponibles</h3>
-          <ListaProductos productos={resultados} />
+          <GrillaProductos productos={resultados} />
         </section>
       </main>
     </Layout>
