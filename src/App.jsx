@@ -13,8 +13,13 @@ import productosIniciales from './data/productos'
 
 function App() {
   // Estado único de productos: todas las páginas leen de aquí.
-  // En el paso 3 se agregará el setter para crear productos desde el panel admin.
-  const [productos] = useState(productosIniciales)
+  // Los productos creados desde el panel admin viven solo en memoria
+  // (se pierden al recargar la página).
+  const [productos, setProductos] = useState(productosIniciales)
+
+  const agregarProducto = (nuevoProducto) => {
+    setProductos((prev) => [...prev, nuevoProducto])
+  }
 
   return (
     <Routes>
@@ -26,7 +31,7 @@ function App() {
         path="/admin"
         element={
           <RutaPrivada rolRequerido="admin">
-            <Admin productos={productos} />
+            <Admin productos={productos} onAgregarProducto={agregarProducto} />
           </RutaPrivada>
         }
       />

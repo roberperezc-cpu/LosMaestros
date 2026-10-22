@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Imagen genérica de producto">
+  <rect width="400" height="300" fill="#e9ecef"/>
+  <g fill="none" stroke="#6c757d" stroke-width="8" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M200 90 L270 125 L270 200 L200 235 L130 200 L130 125 Z"/>
+    <path d="M130 125 L200 160 L270 125"/>
+    <path d="M200 160 L200 235"/>
+  </g>
+  <text x="200" y="272" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#6c757d">Sin imagen</text>
+</svg>

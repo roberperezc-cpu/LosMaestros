@@ -37,4 +37,7 @@ src/
 
 La sesión se guarda en `localStorage` (clave `sesionLosMaestros`).
 
+## Panel Admin
+Desde `/admin` se pueden crear productos (SKU, nombre, categoría, precio, stock, stock mínimo, ubicación y marca). Se guardan solo en memoria (se pierden al recargar) y usan una imagen genérica.
+
 Pendiente: "Confirmar venta", "Ver Historial".
