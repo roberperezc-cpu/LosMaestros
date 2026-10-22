@@ -1,10 +1,15 @@
 import { useState } from 'react'
-import CampoFormulario from '../molecules/CampoFormulario'
-import Entrada from '../atoms/Entrada'
-import Boton from '../atoms/Boton'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
+import CampoValidado from '../molecules/CampoValidado'
+import { validarLogin } from '../../utils/validaciones'
+import { autenticar, guardarSesion } from '../../utils/sesion'
 
-function FormularioLogin() {
-  const [formulario, setFormulario] = useState({ rut: '', password: '' })
+function FormularioLogin({ onLoginExitoso }) {
+  const [formulario, setFormulario] = useState({ correo: '', password: '' })
+  const [errores, setErrores] = useState({})
+  const [errorGeneral, setErrorGeneral] = useState('')
 
   const manejarCambio = (event) => {
     const { name, value } = event.target
@@ -13,36 +18,56 @@ function FormularioLogin() {
 
   const manejarSubmit = (event) => {
     event.preventDefault()
-    // Pendiente (paso 2): validar credenciales estáticas y guardar sesión en localStorage.
+    setErrorGeneral('')
+
+    const nuevosErrores = validarLogin(formulario)
+    setErrores(nuevosErrores)
+    if (Object.keys(nuevosErrores).length > 0) return
+
+    const usuario = autenticar(formulario.correo, formulario.password)
+    if (!usuario) {
+      setErrorGeneral('Correo o contraseña incorrectos.')
+      return
+    }
+
+    guardarSesion(usuario)
+    onLoginExitoso(usuario)
   }
 
   return (
-    <form onSubmit={manejarSubmit}>
-      <CampoFormulario id="rut" label="RUT Contratista o Empresa:">
-        <Entrada
-          id="rut"
-          name="rut"
-          placeholder="12.345.678-K"
-          value={formulario.rut}
-          onChange={manejarCambio}
-          required
-        />
-      </CampoFormulario>
+    <Form noValidate onSubmit={manejarSubmit}>
+      {errorGeneral && (
+        <Alert variant="danger" transition={false}>
+          {errorGeneral}
+        </Alert>
+      )}
 
-      <CampoFormulario id="password" label="Contraseña:">
-        <Entrada
-          id="password"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          value={formulario.password}
-          onChange={manejarCambio}
-          required
-        />
-      </CampoFormulario>
+      <CampoValidado
+        id="correo"
+        label="Correo electrónico:"
+        type="email"
+        name="correo"
+        placeholder="correo@ejemplo.cl"
+        value={formulario.correo}
+        onChange={manejarCambio}
+        error={errores.correo}
+      />
 
-      <Boton type="submit" bloque>Ingresar al Portal</Boton>
-    </form>
+      <CampoValidado
+        id="password"
+        label="Contraseña:"
+        type="password"
+        name="password"
+        placeholder="••••••••"
+        value={formulario.password}
+        onChange={manejarCambio}
+        error={errores.password}
+      />
+
+      <Button type="submit" variant="primary" className="btn-block">
+        Ingresar al Portal
+      </Button>
+    </Form>
   )
 }
 
