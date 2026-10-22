@@ -1,0 +1,53 @@
+/* ==========================================
+   EXTRAS DE LA MIGRACIÓN A REACT
+   Reemplazan los style="..." que estaban inline en el HTML original.
+   styles.css se mantiene sin modificaciones.
+   ========================================== */
+
+/* Catálogo */
+.enlace-producto {
+  text-decoration: none;
+  color: inherit;
+}
+
+.btn-detalle {
+  display: block;
+  margin-top: 0.5rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-detalle-agotado {
+  background-color: #6c757d;
+}
+
+.catalogo-vacio {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Detalle de producto (antes se pintaba con element.style desde JS) */
+.stock-ok-box {
+  background-color: #e8f5e9;
+  border-left: 4px solid var(--stock-ok);
+}
+
+.stock-out-box {
+  background-color: #ffebee;
+  border-left: 4px solid var(--stock-out);
+}
+
+/* Punto de venta */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.carrito-vacio {
+  color: var(--text-muted);
+  padding: 1rem 0;
+}
