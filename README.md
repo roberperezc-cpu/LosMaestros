@@ -27,7 +27,7 @@ src/
 ```
 
 ## Rutas
-`/` · `/catalogo` · `/catalogo/:id` · `/pos` · `/admin` (privada, solo rol admin) · `/login`
+`/` · `/catalogo` · `/catalogo/:id` · `/pos` · `/admin` (privada, solo rol admin) · `/login` · `/registro` · `/perfil` (privada, requiere sesión)
 
 ## Usuarios de prueba (credenciales estáticas)
 | Rol | Correo | Contraseña |
@@ -35,7 +35,7 @@ src/
 | admin | admin@losmaestros.cl | Admin123 |
 | contratista | contratista@losmaestros.cl | Maestro123 |
 
-La sesión se guarda en `localStorage` (clave `sesionLosMaestros`).
+La sesión se guarda en `localStorage` (clave `sesionLosMaestros`). Los usuarios creados en `/registro` se guardan en `localStorage` (clave `usuariosRegistrados`) y pueden iniciar sesión.
 
 ## Panel Admin
 Desde `/admin` se pueden crear productos (SKU, nombre, categoría, precio, stock, stock mínimo, ubicación y marca). Se guardan solo en memoria (se pierden al recargar) y usan una imagen genérica.

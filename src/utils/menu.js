@@ -1,8 +1,8 @@
-import { itemsBase, itemPanelAdmin, itemAcceso } from '../data/menu'
+import { itemsBase, itemPanelAdmin, itemPerfil, itemAcceso } from '../data/menu'
 
 // Arma el menú según la sesión:
 // - sin sesión: "Acceso Contratista"
-// - con sesión: "Cerrar sesión (nombre)"; el Panel Admin solo aparece para el rol admin
+// - con sesión: "Mi Perfil" y "Cerrar sesión (nombre)"; el Panel Admin solo aparece para el rol admin
 export function construirMenu(sesion, onCerrarSesion) {
   const items = [...itemsBase]
 
@@ -11,6 +11,7 @@ export function construirMenu(sesion, onCerrarSesion) {
   }
 
   if (sesion) {
+    items.push(itemPerfil)
     items.push({
       to: '/login',
       label: `Cerrar sesión (${sesion.nombre})`,
