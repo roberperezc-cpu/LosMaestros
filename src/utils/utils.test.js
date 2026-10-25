@@ -5,51 +5,106 @@ import productos from '../data/productos'
 
 describe('obtenerEstadoStock', () => {
   it('marca Agotado cuando el stock es 0', () => {
-    expect(obtenerEstadoStock({ stock: 0, stockMinimo: 5 })).toEqual({
-      clase: 'stock-out',
-      texto: 'Agotado',
-    })
+    // Arrange
+    const producto = { stock: 0, stockMinimo: 5 }
+
+    // Act
+    const estado = obtenerEstadoStock(producto)
+
+    // Assert
+    expect(estado).toEqual({ clase: 'stock-out', texto: 'Agotado' })
   })
 
   it('marca Bajo Stock cuando está en o bajo el mínimo', () => {
-    expect(obtenerEstadoStock({ stock: 5, stockMinimo: 5 }).texto).toBe('Bajo Stock')
+    // Arrange
+    const producto = { stock: 5, stockMinimo: 5 }
+
+    // Act
+    const estado = obtenerEstadoStock(producto)
+
+    // Assert
+    expect(estado.texto).toBe('Bajo Stock')
   })
 
   it('marca En Stock cuando supera el mínimo', () => {
-    expect(obtenerEstadoStock({ stock: 142, stockMinimo: 20 })).toEqual({
-      clase: 'stock-ok',
-      texto: 'En Stock',
-    })
+    // Arrange
+    const producto = { stock: 142, stockMinimo: 20 }
+
+    // Act
+    const estado = obtenerEstadoStock(producto)
+
+    // Assert
+    expect(estado).toEqual({ clase: 'stock-ok', texto: 'En Stock' })
   })
 })
 
 describe('productosParaReponer', () => {
   it('devuelve el taladro (bajo stock) y el tubo (agotado)', () => {
-    const ids = productosParaReponer(productos).map((p) => p.id)
+    // Arrange
+    const inventario = productos
+
+    // Act
+    const ids = productosParaReponer(inventario).map((p) => p.id)
+
+    // Assert
     expect(ids).toEqual(['HER-TAL-042', 'GAS-PVC-110'])
   })
 })
 
 describe('filtrarProductos', () => {
   it('sin filtros devuelve todo', () => {
-    expect(filtrarProductos(productos)).toHaveLength(productos.length)
+    // Arrange
+    const inventario = productos
+
+    // Act
+    const resultado = filtrarProductos(inventario)
+
+    // Assert
+    expect(resultado).toHaveLength(inventario.length)
   })
 
   it('busca por nombre sin distinguir mayúsculas', () => {
-    const r = filtrarProductos(productos, 'TALADRO')
-    expect(r.map((p) => p.id)).toEqual(['HER-TAL-042'])
+    // Arrange
+    const texto = 'TALADRO'
+
+    // Act
+    const resultado = filtrarProductos(productos, texto)
+
+    // Assert
+    expect(resultado.map((p) => p.id)).toEqual(['HER-TAL-042'])
   })
 
   it('busca por SKU', () => {
-    expect(filtrarProductos(productos, 'cab-002')).toHaveLength(1)
+    // Arrange
+    const texto = 'cab-002'
+
+    // Act
+    const resultado = filtrarProductos(productos, texto)
+
+    // Assert
+    expect(resultado).toHaveLength(1)
   })
 
   it('filtra por categoría', () => {
-    const r = filtrarProductos(productos, '', 'gasfiteria')
-    expect(r.map((p) => p.id)).toEqual(['GAS-PVC-110'])
+    // Arrange
+    const categoria = 'gasfiteria'
+
+    // Act
+    const resultado = filtrarProductos(productos, '', categoria)
+
+    // Assert
+    expect(resultado.map((p) => p.id)).toEqual(['GAS-PVC-110'])
   })
 
   it('combina texto y categoría', () => {
-    expect(filtrarProductos(productos, 'cemento', 'gasfiteria')).toHaveLength(0)
+    // Arrange
+    const texto = 'cemento'
+    const categoria = 'gasfiteria'
+
+    // Act
+    const resultado = filtrarProductos(productos, texto, categoria)
+
+    // Assert
+    expect(resultado).toHaveLength(0)
   })
 })
