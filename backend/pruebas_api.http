@@ -1,0 +1,132 @@
+### Archivo para probar la API. Funciona con la extensión "REST Client" de VS Code
+### o con el cliente HTTP de IntelliJ IDEA (botón verde junto a cada petición).
+
+@base = http://localhost:8080/api
+
+############ PRODUCTOS ############
+
+### 1. Obtener todos
+GET {{base}}/productos
+
+### 2. Buscar por ID (SKU)
+GET {{base}}/productos/MAT-CEM-001
+
+### 3. Guardar / crear
+POST {{base}}/productos
+Content-Type: application/json
+
+{
+  "id": "HER-MAR-010",
+  "nombre": "Martillo Carpintero 16oz",
+  "categoria": "herramientas-man",
+  "categoriaNombre": "Herramientas Manuales",
+  "precio": 9990,
+  "stock": 25,
+  "stockMinimo": 5,
+  "ubicacion": "Pasillo C - Estante 1"
+}
+
+### 4. Actualizar
+PUT {{base}}/productos/HER-MAR-010
+Content-Type: application/json
+
+{
+  "id": "HER-MAR-010",
+  "nombre": "Martillo Carpintero 16oz Reforzado",
+  "categoria": "herramientas-man",
+  "categoriaNombre": "Herramientas Manuales",
+  "precio": 10990,
+  "stock": 30,
+  "stockMinimo": 5,
+  "ubicacion": "Pasillo C - Estante 1"
+}
+
+### 5. Eliminar
+DELETE {{base}}/productos/HER-MAR-010
+
+############ CLIENTES ############
+
+### 6. Obtener todos
+GET {{base}}/clientes
+
+### 7. Buscar por ID
+GET {{base}}/clientes/1
+
+### 8. Guardar / crear
+POST {{base}}/clientes
+Content-Type: application/json
+
+{
+  "rut": "76.123.456-0",
+  "nombre": "Maestro Pedro Soto",
+  "correo": "pedro@correo.cl",
+  "telefono": "+56 9 5555 4444",
+  "tipoCliente": "contratista",
+  "region": "coquimbo",
+  "comuna": "Ovalle"
+}
+
+### 9. Actualizar
+PUT {{base}}/clientes/3
+Content-Type: application/json
+
+{
+  "rut": "76.123.456-0",
+  "nombre": "Maestro Pedro Soto Rojas",
+  "correo": "pedro@correo.cl",
+  "telefono": "+56 9 5555 4444",
+  "tipoCliente": "contratista",
+  "region": "coquimbo",
+  "comuna": "Ovalle"
+}
+
+### 10. Eliminar
+DELETE {{base}}/clientes/3
+
+############ VENTAS ############
+
+### 11. Obtener todas
+GET {{base}}/ventas
+
+### 12. Buscar por ID
+GET {{base}}/ventas/1
+
+### 13. Guardar / crear (el servidor pone la fecha y calcula el total)
+POST {{base}}/ventas
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "productoId": "MAT-CEM-001",
+  "cantidad": 2,
+  "precioUnitario": 4890,
+  "tipoEntrega": "retiro",
+  "metodoPago": "transferencia"
+}
+
+### 14. Actualizar
+PUT {{base}}/ventas/1
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "productoId": "MAT-CEM-001",
+  "cantidad": 3,
+  "precioUnitario": 4890,
+  "tipoEntrega": "despacho",
+  "metodoPago": "tarjeta"
+}
+
+### 15. Eliminar
+DELETE {{base}}/ventas/1
+
+############ ERRORES (para mostrar validaciones) ############
+
+### SKU con formato inválido -> 400
+POST {{base}}/productos
+Content-Type: application/json
+
+{ "id": "martillo1", "nombre": "X", "categoria": "a", "categoriaNombre": "a", "precio": 0, "stock": -1, "stockMinimo": 0, "ubicacion": "" }
+
+### Producto que no existe -> 404
+GET {{base}}/productos/XXX-XXX-999
