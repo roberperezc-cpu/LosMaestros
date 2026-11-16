@@ -6,11 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.hateoas.server.core.Relation;
 
 /**
  * Cliente de la ferretería. Entidad independiente (sin relaciones).
  * El RUT y el correo son únicos: MySQL rechaza duplicados.
  */
+@Relation(collectionRelation = "clientes", itemRelation = "cliente")
 @Entity
 @Table(name = "clientes")
 public class Cliente {
