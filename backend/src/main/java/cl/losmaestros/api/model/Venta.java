@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
  * Venta de un producto. Entidad independiente: NO usa @ManyToOne ni otras relaciones.
  * clienteId y productoId son simples valores (el id del cliente y el SKU del producto).
  */
+@Relation(collectionRelation = "ventas", itemRelation = "venta")
 @Entity
 @Table(name = "ventas")
 public class Venta {

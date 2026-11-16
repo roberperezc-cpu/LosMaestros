@@ -3,11 +3,14 @@ package cl.losmaestros.api.controller;
 import cl.losmaestros.api.dto.ProductoRequest;
 import cl.losmaestros.api.exception.ConflictoException;
 import cl.losmaestros.api.exception.RecursoNoEncontradoException;
+import cl.losmaestros.api.assembler.ProductoModelAssembler;
 import cl.losmaestros.api.model.Producto;
 import cl.losmaestros.api.service.ProductoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,8 +26,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/** Prueba solo la capa web (sin base de datos): el servicio se reemplaza por un mock. */
+/** Prueba solo la capa web: la seguridad se desactiva aquí (se prueba aparte) y el servicio es un mock. */
 @WebMvcTest(ProductoController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@Import(ProductoModelAssembler.class)
 class ProductoControllerTest {
 
     private static final String JSON_VALIDO = """
@@ -60,8 +65,21 @@ class ProductoControllerTest {
         // Act + Assert
         mockMvc.perform(get("/api/productos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value("MAT-CEM-001"))
-                .andExpect(jsonPath("$[0].stockMinimo").value(20));
+                .andExpect(jsonPath("$._embedded.productos[0].id").value("MAT-CEM-001"))
+                .andExpect(jsonPath("$._embedded.productos[0].stockMinimo").value(20));
+    }
+
+    @Test
+    void buscarPorIdIncluyeLosEnlacesHateoas() throws Exception {
+        // Arrange
+        when(servicio.buscarPorId("MAT-CEM-001")).thenReturn(productoDeEjemplo());
+
+        // Act + Assert
+        mockMvc.perform(get("/api/productos/MAT-CEM-001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Saco de Cemento Melón 25kg"))
+                .andExpect(jsonPath("$._links.self.href").exists())
+                .andExpect(jsonPath("$._links.productos.href").exists());
     }
 
     @Test

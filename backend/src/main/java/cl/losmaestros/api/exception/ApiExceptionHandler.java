@@ -27,6 +27,11 @@ public class ApiExceptionHandler {
         return respuesta(HttpStatus.CONFLICT, ex.getMessage(), null);
     }
 
+    @ExceptionHandler(CredencialesInvalidasException.class)
+    public ResponseEntity<Map<String, Object>> credencialesInvalidas(CredencialesInvalidasException ex) {
+        return respuesta(HttpStatus.UNAUTHORIZED, ex.getMessage(), null);
+    }
+
     /** MySQL rechazó el dato (por ejemplo, RUT o correo de cliente repetido). */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, Object>> integridad(DataIntegrityViolationException ex) {

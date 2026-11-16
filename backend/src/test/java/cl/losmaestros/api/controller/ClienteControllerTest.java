@@ -2,11 +2,14 @@ package cl.losmaestros.api.controller;
 
 import cl.losmaestros.api.dto.ClienteRequest;
 import cl.losmaestros.api.exception.RecursoNoEncontradoException;
+import cl.losmaestros.api.assembler.ClienteModelAssembler;
 import cl.losmaestros.api.model.Cliente;
 import cl.losmaestros.api.service.ClienteService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,7 +24,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/** Prueba solo la capa web: la seguridad se desactiva aquí (se prueba aparte) y el servicio es un mock. */
 @WebMvcTest(ClienteController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@Import(ClienteModelAssembler.class)
 class ClienteControllerTest {
 
     private static final String JSON_VALIDO = """
@@ -56,7 +62,7 @@ class ClienteControllerTest {
         // Act + Assert
         mockMvc.perform(get("/api/clientes"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].rut").value("12.345.678-5"));
+                .andExpect(jsonPath("$._embedded.clientes[0].rut").value("12.345.678-5"));
     }
 
     @Test

@@ -1,19 +1,69 @@
 ### Archivo para probar la API. Funciona con la extensión "REST Client" de VS Code
-### o con el cliente HTTP de IntelliJ IDEA (botón verde junto a cada petición).
+### (o con el cliente HTTP de IntelliJ Ultimate). En Postman, usa las mismas rutas.
+###
+### Orden: 1) iniciar sesión (el token queda guardado en @token), 2) probar el resto.
 
 @base = http://localhost:8080/api
 
-############ PRODUCTOS ############
+############ AUTENTICACIÓN ############
 
-### 1. Obtener todos
+### Iniciar sesión como ADMIN (guarda el token)
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "correo": "admin@losmaestros.cl",
+  "password": "Admin123"
+}
+
+###
+@token = {{login.response.body.token}}
+
+### Iniciar sesión como USER (contratista)
+# @name loginUser
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "correo": "contratista@losmaestros.cl",
+  "password": "Maestro123"
+}
+
+###
+@tokenUser = {{loginUser.response.body.token}}
+
+### Registrar un usuario nuevo
+POST {{base}}/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Maria Soto",
+  "correo": "maria@correo.cl",
+  "password": "Clave123"
+}
+
+### Login con contraseña incorrecta -> 401
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "correo": "admin@losmaestros.cl",
+  "password": "incorrecta1"
+}
+
+############ PRODUCTOS (GET es público) ############
+
+### Obtener todos (no necesita token; la respuesta trae _links HATEOAS)
 GET {{base}}/productos
 
-### 2. Buscar por ID (SKU)
+### Buscar por ID (SKU)
 GET {{base}}/productos/MAT-CEM-001
 
-### 3. Guardar / crear
+### Crear (requiere ADMIN)
 POST {{base}}/productos
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "id": "HER-MAR-010",
@@ -26,9 +76,23 @@ Content-Type: application/json
   "ubicacion": "Pasillo C - Estante 1"
 }
 
-### 4. Actualizar
+### Crear sin token -> 401
+POST {{base}}/productos
+Content-Type: application/json
+
+{ "id": "HER-MAR-011", "nombre": "Martillo", "categoria": "a", "categoriaNombre": "a", "precio": 1000, "stock": 1, "stockMinimo": 1, "ubicacion": "x" }
+
+### Crear con token de USER -> 403
+POST {{base}}/productos
+Content-Type: application/json
+Authorization: Bearer {{tokenUser}}
+
+{ "id": "HER-MAR-011", "nombre": "Martillo", "categoria": "a", "categoriaNombre": "a", "precio": 1000, "stock": 1, "stockMinimo": 1, "ubicacion": "x" }
+
+### Actualizar (requiere ADMIN)
 PUT {{base}}/productos/HER-MAR-010
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "id": "HER-MAR-010",
@@ -41,20 +105,24 @@ Content-Type: application/json
   "ubicacion": "Pasillo C - Estante 1"
 }
 
-### 5. Eliminar
+### Eliminar (requiere ADMIN)
 DELETE {{base}}/productos/HER-MAR-010
+Authorization: Bearer {{token}}
 
-############ CLIENTES ############
+############ CLIENTES (requieren token) ############
 
-### 6. Obtener todos
+### Obtener todos
 GET {{base}}/clientes
+Authorization: Bearer {{token}}
 
-### 7. Buscar por ID
+### Buscar por ID
 GET {{base}}/clientes/1
+Authorization: Bearer {{token}}
 
-### 8. Guardar / crear
+### Crear
 POST {{base}}/clientes
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "rut": "76.123.456-0",
@@ -66,9 +134,10 @@ Content-Type: application/json
   "comuna": "Ovalle"
 }
 
-### 9. Actualizar
+### Actualizar
 PUT {{base}}/clientes/3
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "rut": "76.123.456-0",
@@ -80,20 +149,24 @@ Content-Type: application/json
   "comuna": "Ovalle"
 }
 
-### 10. Eliminar
+### Eliminar (requiere ADMIN)
 DELETE {{base}}/clientes/3
+Authorization: Bearer {{token}}
 
-############ VENTAS ############
+############ VENTAS (requieren token) ############
 
-### 11. Obtener todas
+### Obtener todas
 GET {{base}}/ventas
+Authorization: Bearer {{token}}
 
-### 12. Buscar por ID
+### Buscar por ID
 GET {{base}}/ventas/1
+Authorization: Bearer {{token}}
 
-### 13. Guardar / crear (el servidor pone la fecha y calcula el total)
+### Crear (el servidor pone la fecha y calcula el total)
 POST {{base}}/ventas
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "clienteId": 1,
@@ -104,9 +177,10 @@ Content-Type: application/json
   "metodoPago": "transferencia"
 }
 
-### 14. Actualizar
+### Actualizar
 PUT {{base}}/ventas/1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "clienteId": 1,
@@ -117,16 +191,21 @@ Content-Type: application/json
   "metodoPago": "tarjeta"
 }
 
-### 15. Eliminar
+### Eliminar (requiere ADMIN)
 DELETE {{base}}/ventas/1
+Authorization: Bearer {{token}}
 
-############ ERRORES (para mostrar validaciones) ############
+############ ERRORES ############
 
-### SKU con formato inválido -> 400
+### Clientes sin token -> 401
+GET {{base}}/clientes
+
+### SKU inválido -> 400 (con token de ADMIN)
 POST {{base}}/productos
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 { "id": "martillo1", "nombre": "X", "categoria": "a", "categoriaNombre": "a", "precio": 0, "stock": -1, "stockMinimo": 0, "ubicacion": "" }
 
-### Producto que no existe -> 404
+### Producto inexistente -> 404
 GET {{base}}/productos/XXX-XXX-999

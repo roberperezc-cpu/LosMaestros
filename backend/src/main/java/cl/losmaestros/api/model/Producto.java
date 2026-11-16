@@ -4,11 +4,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.hateoas.server.core.Relation;
 
 /**
  * Producto del catálogo. Entidad independiente: no tiene relaciones con otras entidades.
  * Cada atributo se guarda como una columna de la tabla "productos".
  */
+@Relation(collectionRelation = "productos", itemRelation = "producto")
 @Entity
 @Table(name = "productos")
 public class Producto {
