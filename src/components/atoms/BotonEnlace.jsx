@@ -4,6 +4,7 @@ const VARIANTES = {
   primario: 'btn btn-primary',
   secundario: 'btn btn-secondary',
   pequeno: 'btn-sm btn-detalle',
+  accion: 'btn-sm btn-accion',
   volver: 'btn-back',
   servicio: 'service-link',
 }

@@ -21,11 +21,11 @@ function DatosPerfil({ usuario }) {
         <h3>{usuario.nombre}</h3>
         <ul>
           <DatoPerfil etiqueta="Correo" valor={usuario.correo} />
-          <DatoPerfil etiqueta="RUT" valor={usuario.rut} />
-          <DatoPerfil etiqueta="Teléfono" valor={usuario.telefono} />
-          <DatoPerfil etiqueta="Tipo de cliente" valor={tipo ? tipo.label : usuario.tipoCliente} />
-          <DatoPerfil etiqueta="Región" valor={region ? region.label : usuario.region} />
-          <DatoPerfil etiqueta="Comuna" valor={usuario.comuna} />
+          <DatoPerfil etiqueta="RUT" valor={usuario.rut || '—'} />
+          <DatoPerfil etiqueta="Teléfono" valor={usuario.telefono || '—'} />
+          <DatoPerfil etiqueta="Tipo de cliente" valor={tipo ? tipo.label : usuario.tipoCliente || '—'} />
+          <DatoPerfil etiqueta="Región" valor={region ? region.label : usuario.region || '—'} />
+          <DatoPerfil etiqueta="Comuna" valor={usuario.comuna || '—'} />
           <DatoPerfil etiqueta="Rol" valor={ETIQUETAS_ROL[usuario.rol] || usuario.rol} />
         </ul>
       </div>
