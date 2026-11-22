@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 import Inicio from './pages/Inicio'
@@ -7,26 +7,48 @@ import DetalleProducto from './pages/DetalleProducto'
 import Carrito from './pages/Carrito'
 import POS from './pages/POS'
 import Admin from './pages/Admin'
+import ProductoFormulario from './pages/ProductoFormulario'
 import Login from './pages/Login'
 import Registro from './pages/Registro'
 import Perfil from './pages/Perfil'
 import NoEncontrada from './pages/NoEncontrada'
 import RutaPrivada from './routes/RutaPrivada'
 import productosIniciales from './data/productos'
+import ProductoService from './services/ProductoService'
 import { obtenerCarrito, guardarCarrito, limpiarCarrito } from './utils/carrito'
 
 function App() {
   // Estado único de productos: todas las páginas leen de aquí.
-  // Los productos creados desde el panel admin viven solo en memoria
-  // (se pierden al recargar la página).
+  // Parte con los datos locales y, apenas la API responde, se reemplazan por los de la base de datos.
   const [productos, setProductos] = useState(productosIniciales)
+
+  useEffect(() => {
+    ProductoService.obtenerTodos()
+      .then(setProductos)
+      .catch(() => {
+        // Sin conexión con el backend: se siguen mostrando los datos locales (data/productos.js).
+      })
+  }, [])
 
   // Carrito: lista de { id, cantidad }. Se guarda también en localStorage
   // para que el menú pueda mostrar la cantidad de unidades en cualquier página.
   const [carrito, setCarrito] = useState(limpiarCarrito(obtenerCarrito(), productosIniciales))
 
-  const agregarProducto = (nuevoProducto) => {
-    setProductos((prev) => [...prev, nuevoProducto])
+  // CRUD de productos: primero se llama a la API y, si resulta, se actualiza el estado.
+  // Si la API falla (sin token, sin permiso, SKU repetido...) el error llega a quien llamó.
+  const guardarProducto = async (producto) => {
+    const creado = await ProductoService.crear(producto)
+    setProductos((prev) => [...prev, creado])
+  }
+
+  const modificarProducto = async (id, producto) => {
+    const actualizado = await ProductoService.actualizar(id, producto)
+    setProductos((prev) => prev.map((p) => (p.id === id ? actualizado : p)))
+  }
+
+  const borrarProducto = async (id) => {
+    await ProductoService.eliminar(id)
+    setProductos((prev) => prev.filter((p) => p.id !== id))
   }
 
   const actualizarCarrito = (nuevoCarrito) => {
@@ -111,7 +133,23 @@ function App() {
         path="/admin"
         element={
           <RutaPrivada rolRequerido="admin">
-            <Admin productos={productos} onAgregarProducto={agregarProducto} />
+            <Admin productos={productos} onEliminarProducto={borrarProducto} />
+          </RutaPrivada>
+        }
+      />
+      <Route
+        path="/admin/productos/nuevo"
+        element={
+          <RutaPrivada rolRequerido="admin">
+            <ProductoFormulario productos={productos} onCrear={guardarProducto} />
+          </RutaPrivada>
+        }
+      />
+      <Route
+        path="/admin/productos/:id/editar"
+        element={
+          <RutaPrivada rolRequerido="admin">
+            <ProductoFormulario productos={productos} onActualizar={modificarProducto} />
           </RutaPrivada>
         }
       />

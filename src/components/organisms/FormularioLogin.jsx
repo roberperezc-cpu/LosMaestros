@@ -4,19 +4,20 @@ import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import CampoValidado from '../molecules/CampoValidado'
 import { validarLogin } from '../../utils/validaciones'
-import { autenticar, guardarSesion } from '../../utils/sesion'
+import { iniciarSesion } from '../../services/SesionService'
 
 function FormularioLogin({ onLoginExitoso }) {
   const [formulario, setFormulario] = useState({ correo: '', password: '' })
   const [errores, setErrores] = useState({})
   const [errorGeneral, setErrorGeneral] = useState('')
+  const [enviando, setEnviando] = useState(false)
 
   const manejarCambio = (event) => {
     const { name, value } = event.target
     setFormulario((prev) => ({ ...prev, [name]: value }))
   }
 
-  const manejarSubmit = (event) => {
+  const manejarSubmit = async (event) => {
     event.preventDefault()
     setErrorGeneral('')
 
@@ -24,13 +25,15 @@ function FormularioLogin({ onLoginExitoso }) {
     setErrores(nuevosErrores)
     if (Object.keys(nuevosErrores).length > 0) return
 
-    const usuario = autenticar(formulario.correo, formulario.password)
+    setEnviando(true)
+    const usuario = await iniciarSesion(formulario.correo, formulario.password)
+    setEnviando(false)
+
     if (!usuario) {
       setErrorGeneral('Correo o contraseña incorrectos.')
       return
     }
 
-    guardarSesion(usuario)
     onLoginExitoso(usuario)
   }
 
@@ -64,7 +67,7 @@ function FormularioLogin({ onLoginExitoso }) {
         error={errores.password}
       />
 
-      <Button type="submit" variant="primary" className="btn-block">
+      <Button type="submit" variant="primary" className="btn-block" disabled={enviando}>
         Ingresar al Portal
       </Button>
     </Form>

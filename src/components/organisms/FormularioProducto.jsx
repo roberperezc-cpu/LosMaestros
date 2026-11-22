@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import Alert from 'react-bootstrap/Alert'
 import CampoValidado from '../molecules/CampoValidado'
+import Notificacion from '../molecules/Notificacion'
+import BotonEnlace from '../atoms/BotonEnlace'
 import categorias from '../../data/categorias'
 import { validarProducto } from '../../utils/validaciones'
 import { crearProducto } from '../../utils/productos'
+import { mensajeDeError } from '../../utils/errores'
 
 const FORMULARIO_VACIO = {
   sku: '',
@@ -18,45 +20,68 @@ const FORMULARIO_VACIO = {
   marca: '',
 }
 
-function FormularioProducto({ productos, onAgregarProducto }) {
-  const [formulario, setFormulario] = useState(FORMULARIO_VACIO)
+// Al editar, el formulario parte con los datos del producto (todo como texto).
+function formularioDesde(producto) {
+  if (!producto) return FORMULARIO_VACIO
+
+  return {
+    sku: producto.id,
+    nombre: producto.nombre,
+    categoria: producto.categoria,
+    precio: String(producto.precio),
+    stock: String(producto.stock),
+    stockMinimo: String(producto.stockMinimo),
+    ubicacion: producto.ubicacion,
+    marca: (producto.especificaciones && producto.especificaciones.Marca) || '',
+  }
+}
+
+/**
+ * Formulario de producto. Sirve para crear (productoInicial = null) y para editar.
+ * onGuardar(producto) debe devolver una promesa: si falla, se muestra el error del servidor.
+ */
+function FormularioProducto({ productos = [], productoInicial = null, onGuardar }) {
+  const editando = Boolean(productoInicial)
+
+  const [formulario, setFormulario] = useState(formularioDesde(productoInicial))
   const [errores, setErrores] = useState({})
-  const [mensajeExito, setMensajeExito] = useState('')
+  const [errorServidor, setErrorServidor] = useState('')
+  const [guardando, setGuardando] = useState(false)
 
   const manejarCambio = (event) => {
     const { name, value } = event.target
     setFormulario((prev) => ({ ...prev, [name]: value }))
-    setMensajeExito('')
   }
 
-  const manejarSubmit = (event) => {
+  const manejarSubmit = async (event) => {
     event.preventDefault()
+    setErrorServidor('')
 
-    const nuevosErrores = validarProducto(formulario, productos)
+    // Al editar, el SKU ya existe (es el del propio producto), así que no se busca repetido.
+    const nuevosErrores = validarProducto(formulario, editando ? [] : productos)
     setErrores(nuevosErrores)
     if (Object.keys(nuevosErrores).length > 0) return
 
-    const nuevoProducto = crearProducto(formulario)
-    onAgregarProducto(nuevoProducto)
-
-    setFormulario(FORMULARIO_VACIO)
-    setMensajeExito(`Producto "${nuevoProducto.nombre}" agregado al catálogo.`)
+    setGuardando(true)
+    try {
+      await onGuardar(crearProducto(formulario, productoInicial))
+    } catch (error) {
+      setErrorServidor(mensajeDeError(error))
+      setGuardando(false)
+    }
   }
 
   return (
     <section className="card">
-      <h3>Registrar Nuevo Producto</h3>
+      <h3>{editando ? 'Editar Producto' : 'Registrar Nuevo Producto'}</h3>
       <p>
-        El producto se agrega al catálogo mientras la página esté abierta y se le asigna una imagen
-        genérica.
+        {editando
+          ? 'Modifica los datos del producto. El SKU no se puede cambiar.'
+          : 'El producto se guarda en la base de datos y se le asigna una imagen genérica.'}
       </p>
 
       <Form noValidate onSubmit={manejarSubmit}>
-        {mensajeExito && (
-          <Alert variant="success" transition={false}>
-            {mensajeExito}
-          </Alert>
-        )}
+        {errorServidor && <Notificacion tipo="danger">{errorServidor}</Notificacion>}
 
         <div className="form-grid">
           <CampoValidado
@@ -67,6 +92,7 @@ function FormularioProducto({ productos, onAgregarProducto }) {
             value={formulario.sku}
             onChange={manejarCambio}
             error={errores.sku}
+            readOnly={editando}
           />
 
           <CampoValidado
@@ -116,7 +142,7 @@ function FormularioProducto({ productos, onAgregarProducto }) {
 
           <CampoValidado
             id="stock"
-            label="Stock inicial:"
+            label={editando ? 'Stock:' : 'Stock inicial:'}
             type="number"
             name="stock"
             placeholder="25"
@@ -147,9 +173,12 @@ function FormularioProducto({ productos, onAgregarProducto }) {
           />
         </div>
 
-        <Button type="submit" variant="primary">
-          Agregar Producto
-        </Button>
+        <div className="barra-acciones">
+          <Button type="submit" variant="primary" disabled={guardando}>
+            {guardando ? 'Guardando...' : editando ? 'Guardar cambios' : 'Agregar Producto'}
+          </Button>
+          <BotonEnlace to="/admin" variante="secundario">Cancelar</BotonEnlace>
+        </div>
       </Form>
     </section>
   )
