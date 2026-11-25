@@ -16,5 +16,6 @@ vi.mock('./src/services/ProductoService.js', () => ({
 vi.mock('./src/services/AuthService.js', () => ({
   default: {
     login: vi.fn(() => Promise.reject(new Error('API no disponible en las pruebas'))),
+    registro: vi.fn(() => Promise.reject(new Error('API no disponible en las pruebas'))),
   },
 }))

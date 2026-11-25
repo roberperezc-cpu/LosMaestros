@@ -62,7 +62,7 @@ Flujo: `POST /api/auth/login` devuelve un token → se envía en cada petición 
 
 | Ruta | Acceso |
 |---|---|
-| `POST /api/auth/login`, `POST /api/auth/registro` | Público |
+| `POST /api/auth/login`, `POST /api/auth/registro` | Público. El registro crea la cuenta (`usuarios`) y la ficha del cliente (`clientes`) en una sola transacción |
 | `GET /api/productos` y `GET /api/productos/{sku}` | Público (catálogo) |
 | `POST`, `PUT`, `DELETE /api/productos` | Solo ADMIN |
 | `GET`, `POST`, `PUT /api/clientes` y `/api/ventas` | Cualquier usuario con token |

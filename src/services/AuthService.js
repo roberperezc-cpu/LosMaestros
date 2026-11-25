@@ -1,9 +1,15 @@
 import api from './api'
 
-// Inicio de sesión contra la API: devuelve { token, tipo, expiraEnMinutos, usuario }.
+// Autenticación contra la API. Ambas operaciones devuelven
+// { token, tipo, expiraEnMinutos, usuario, cliente } (cliente es null para el administrador).
 class AuthService {
   login(correo, password) {
     return api.post('/auth/login', { correo, password }).then((respuesta) => respuesta.data)
+  }
+
+  // Crea la cuenta (tabla usuarios) y la ficha del cliente (tabla clientes) en MySQL.
+  registro(datos) {
+    return api.post('/auth/registro', datos).then((respuesta) => respuesta.data)
   }
 }
 

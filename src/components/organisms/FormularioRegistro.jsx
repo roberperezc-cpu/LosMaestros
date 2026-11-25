@@ -3,10 +3,11 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import CampoValidado from '../molecules/CampoValidado'
 import CamposRegionComuna from '../molecules/CamposRegionComuna'
+import Notificacion from '../molecules/Notificacion'
 import tiposCliente from '../../data/tiposCliente'
 import { validarRegistro } from '../../utils/validaciones'
-import { obtenerTodosLosUsuarios, registrarUsuario } from '../../utils/usuarios'
-import { guardarSesion } from '../../utils/sesion'
+import { mensajeDeError } from '../../utils/errores'
+import { registrarCuenta } from '../../services/SesionService'
 
 const FORMULARIO_VACIO = {
   nombre: '',
@@ -24,6 +25,8 @@ const FORMULARIO_VACIO = {
 function FormularioRegistro({ onRegistroExitoso }) {
   const [formulario, setFormulario] = useState(FORMULARIO_VACIO)
   const [errores, setErrores] = useState({})
+  const [errorServidor, setErrorServidor] = useState('')
+  const [enviando, setEnviando] = useState(false)
 
   const manejarCambio = (event) => {
     const { name, value, type, checked } = event.target
@@ -37,20 +40,29 @@ function FormularioRegistro({ onRegistroExitoso }) {
     })
   }
 
-  const manejarSubmit = (event) => {
+  const manejarSubmit = async (event) => {
     event.preventDefault()
+    setErrorServidor('')
 
-    const nuevosErrores = validarRegistro(formulario, obtenerTodosLosUsuarios())
+    // Primero las validaciones del formulario; el correo y el RUT repetidos los detecta el servidor.
+    const nuevosErrores = validarRegistro(formulario, [])
     setErrores(nuevosErrores)
     if (Object.keys(nuevosErrores).length > 0) return
 
-    const usuario = registrarUsuario(formulario)
-    guardarSesion(usuario)
-    onRegistroExitoso(usuario)
+    setEnviando(true)
+    try {
+      const usuario = await registrarCuenta(formulario)
+      onRegistroExitoso(usuario)
+    } catch (error) {
+      setErrorServidor(mensajeDeError(error))
+      setEnviando(false)
+    }
   }
 
   return (
     <Form noValidate onSubmit={manejarSubmit}>
+      {errorServidor && <Notificacion tipo="danger">{errorServidor}</Notificacion>}
+
       <div className="form-grid">
         <CampoValidado
           id="nombre"
@@ -152,7 +164,7 @@ function FormularioRegistro({ onRegistroExitoso }) {
         />
       </Form.Group>
 
-      <Button type="submit" variant="primary">
+      <Button type="submit" variant="primary" disabled={enviando}>
         Crear Cuenta
       </Button>
     </Form>

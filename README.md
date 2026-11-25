@@ -67,4 +67,8 @@ src/services/   ProductoService (CRUD), AuthService y SesionService (login), api
 src/utils/      productosApi.js (adapta la respuesta HAL de la API), errores.js (mensajes de error)
 ```
 
-Pendiente de integrar: el registro de usuarios, el carrito y el descuento de stock en el checkout siguen siendo locales.
+**Registro:** el formulario de `/registro` envía los datos a `POST /api/auth/registro`, que crea la cuenta (tabla `usuarios`, rol USER,
+contraseña cifrada) y la ficha del cliente (tabla `clientes`) en una sola operación, y devuelve el token JWT. Si el correo o el RUT ya
+existen, el servidor responde 409 y el formulario muestra el mensaje. Sin conexión con el backend no se puede crear una cuenta.
+
+Pendiente de integrar: el carrito y el descuento de stock en el checkout siguen siendo locales.

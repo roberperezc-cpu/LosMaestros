@@ -2,6 +2,7 @@ package cl.losmaestros.api.util;
 
 import cl.losmaestros.api.dto.ClienteRequest;
 import cl.losmaestros.api.dto.ProductoRequest;
+import cl.losmaestros.api.dto.RegistroRequest;
 import cl.losmaestros.api.dto.VentaRequest;
 import cl.losmaestros.api.model.Cliente;
 import cl.losmaestros.api.model.Producto;
@@ -66,6 +67,13 @@ public final class DatosPrueba {
                 FAKER.options().option("particular", "contratista", "empresa"),
                 "coquimbo",
                 FAKER.address().cityName());
+    }
+
+    public static RegistroRequest registroRequest() {
+        ClienteRequest datos = clienteRequest();
+        return new RegistroRequest(
+                datos.nombre(), datos.correo(), "Clave123", datos.rut(), datos.telefono(),
+                datos.tipoCliente(), datos.region(), datos.comuna());
     }
 
     public static VentaRequest ventaRequest() {

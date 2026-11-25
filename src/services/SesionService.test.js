@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import AuthService from './AuthService'
-import { iniciarSesion } from './SesionService'
+import { iniciarSesion, registrarCuenta } from './SesionService'
 import { obtenerSesion } from '../utils/sesion'
 
 const respuestaAdmin = {
@@ -61,6 +61,77 @@ describe('iniciarSesion', () => {
 
     // Assert
     expect(usuario).toBeNull()
+    expect(obtenerSesion()).toBeNull()
+  })
+
+  it('si la API informa la ficha de cliente, el perfil y el rol salen de ella', async () => {
+    // Arrange
+    AuthService.login.mockResolvedValueOnce({
+      ...respuestaAdmin,
+      usuario: { id: 9, nombre: 'Maria Soto', correo: 'maria@correo.cl', rol: 'USER' },
+      cliente: { rut: '12.345.679-3', telefono: '+56 9 1111 2222', tipoCliente: 'contratista', region: 'coquimbo', comuna: 'Ovalle' },
+    })
+
+    // Act
+    const usuario = await iniciarSesion('maria@correo.cl', 'Clave123')
+
+    // Assert
+    expect(usuario).toMatchObject({ rol: 'contratista', rut: '12.345.679-3', comuna: 'Ovalle' })
+  })
+})
+
+describe('registrarCuenta', () => {
+  const formulario = {
+    nombre: ' Juan Pérez ',
+    rut: '9876543-3',
+    correo: ' Juan@Correo.cl ',
+    telefono: '+56 9 1234 5678',
+    tipoCliente: 'particular',
+    region: 'coquimbo',
+    comuna: 'La Serena',
+    password: 'Clave123',
+    confirmarPassword: 'Clave123',
+    terminos: true,
+  }
+
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  it('envía los datos normalizados a la API y guarda la sesión con el token', async () => {
+    // Arrange
+    AuthService.registro.mockResolvedValueOnce({
+      token: 'token-nuevo',
+      tipo: 'Bearer',
+      expiraEnMinutos: 60,
+      usuario: { id: 7, nombre: 'Juan Pérez', correo: 'juan@correo.cl', rol: 'USER' },
+      cliente: { rut: '9.876.543-3', telefono: '+56 9 1234 5678', tipoCliente: 'particular', region: 'coquimbo', comuna: 'La Serena' },
+    })
+
+    // Act
+    const usuario = await registrarCuenta(formulario)
+
+    // Assert
+    expect(AuthService.registro).toHaveBeenCalledWith({
+      nombre: 'Juan Pérez',
+      correo: 'juan@correo.cl',
+      password: 'Clave123',
+      rut: '9.876.543-3',
+      telefono: '+56 9 1234 5678',
+      tipoCliente: 'particular',
+      region: 'coquimbo',
+      comuna: 'La Serena',
+    })
+    expect(usuario).toMatchObject({ rol: 'cliente', token: 'token-nuevo', rut: '9.876.543-3' })
+    expect(obtenerSesion().token).toBe('token-nuevo')
+  })
+
+  it('si la API rechaza el registro propaga el error y no guarda ninguna sesión', async () => {
+    // Arrange
+    AuthService.registro.mockRejectedValueOnce({ response: { status: 409, data: { mensaje: 'Ya existe un cliente con ese RUT.' } } })
+
+    // Act + Assert
+    await expect(registrarCuenta(formulario)).rejects.toMatchObject({ response: { status: 409 } })
     expect(obtenerSesion()).toBeNull()
   })
 })

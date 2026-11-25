@@ -40,10 +40,10 @@ public class AuthController {
 
     @PostMapping("/registro")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Registrar usuario", description = "Crea una cuenta con rol USER y devuelve su token JWT.")
+    @Operation(summary = "Registrar usuario", description = "Crea la cuenta (rol USER, contraseña cifrada) y la ficha del cliente en MySQL, y devuelve su token JWT.")
     @ApiResponse(responseCode = "201", description = "Cuenta creada")
     @ApiResponse(responseCode = "400", description = "Datos inválidos")
-    @ApiResponse(responseCode = "409", description = "El correo ya está registrado")
+    @ApiResponse(responseCode = "409", description = "El correo o el RUT ya están registrados")
     public AuthResponse registro(@Valid @RequestBody RegistroRequest datos) {
         return servicio.registrar(datos);
     }

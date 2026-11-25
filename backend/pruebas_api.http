@@ -33,14 +33,19 @@ Content-Type: application/json
 ###
 @tokenUser = {{loginUser.response.body.token}}
 
-### Registrar un usuario nuevo
+### Registrar un usuario nuevo (crea la cuenta y la ficha de cliente)
 POST {{base}}/auth/registro
 Content-Type: application/json
 
 {
   "nombre": "Maria Soto",
   "correo": "maria@correo.cl",
-  "password": "Clave123"
+  "password": "Clave123",
+  "rut": "12.345.679-3",
+  "telefono": "+56 9 1111 2222",
+  "tipoCliente": "particular",
+  "region": "coquimbo",
+  "comuna": "La Serena"
 }
 
 ### Login con contraseña incorrecta -> 401

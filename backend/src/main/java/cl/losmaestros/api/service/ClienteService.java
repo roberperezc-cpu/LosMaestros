@@ -4,6 +4,7 @@ import cl.losmaestros.api.dto.ClienteRequest;
 import cl.losmaestros.api.exception.RecursoNoEncontradoException;
 import cl.losmaestros.api.model.Cliente;
 import cl.losmaestros.api.repository.ClienteRepository;
+import cl.losmaestros.api.util.Rut;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +57,7 @@ public class ClienteService {
     }
 
     private void copiarDatos(Cliente cliente, ClienteRequest datos) {
-        cliente.setRut(datos.rut().trim().toUpperCase());
+        cliente.setRut(Rut.normalizar(datos.rut()));
         cliente.setNombre(datos.nombre().trim());
         cliente.setCorreo(datos.correo().trim().toLowerCase());
         cliente.setTelefono(datos.telefono().trim());
