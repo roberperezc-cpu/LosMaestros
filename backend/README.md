@@ -44,6 +44,12 @@ Flyway registra lo aplicado en la tabla `flyway_schema_history`. Un cambio futur
 migración **nueva** (por ejemplo `V4__...sql`); las ya aplicadas no se modifican. Hibernate solo **valida**
 (`ddl-auto=validate`) que las entidades coincidan con las tablas.
 
+## Script SQL completo (alternativa a Flyway)
+`database/losmaestros_completo.sql` crea la base de datos, las 4 tablas y todos los datos de ejemplo, incluidos los usuarios
+con la contraseña cifrada. Es equivalente a las migraciones V1 a V4. Para usarlo: ejecútalo en phpMyAdmin (pestaña SQL) y
+arranca el backend; Flyway detecta la base existente y la toma como versión 4 (`spring.flyway.baseline-on-migrate`).
+Si prefieres no usar el script, deja la base vacía y Flyway la crea sola.
+
 ## Swagger (documentación)
 - Interfaz: **http://localhost:8080/swagger-ui.html**
 - JSON OpenAPI: http://localhost:8080/v3/api-docs
