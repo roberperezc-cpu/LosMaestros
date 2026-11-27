@@ -94,15 +94,15 @@ function App() {
     actualizarCarrito(carrito.filter((item) => item.id !== id))
   }
 
-  // Descuenta del inventario lo comprado y vacía el carrito.
+  // Se llama cuando la API ya confirmó la compra: vacía el carrito. El stock lo descuenta el
+  // servidor, así que se vuelve a pedir el catálogo para mostrarlo actualizado.
   const confirmarCompra = () => {
-    setProductos((prev) =>
-      prev.map((producto) => {
-        const linea = carrito.find((item) => item.id === producto.id)
-        return linea ? { ...producto, stock: producto.stock - linea.cantidad } : producto
-      }),
-    )
     actualizarCarrito([])
+    ProductoService.obtenerTodos()
+      .then(setProductos)
+      .catch(() => {
+        // Sin conexión: se mantiene el catálogo que ya estaba en pantalla.
+      })
   }
 
   return (

@@ -51,6 +51,14 @@ public class Venta {
     @Column(name = "metodo_pago", nullable = false, length = 20)
     private String metodoPago;
 
+    /** Número de pedido (PED-...). Las ventas de una misma compra lo comparten. Null en ventas creadas por el CRUD. */
+    @Column(name = "numero_pedido", length = 20)
+    private String numeroPedido;
+
+    /** Dirección del despacho. Null si se retira en tienda. */
+    @Column(name = "direccion_entrega", length = 200)
+    private String direccionEntrega;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -77,4 +85,10 @@ public class Venta {
 
     public String getMetodoPago() { return metodoPago; }
     public void setMetodoPago(String metodoPago) { this.metodoPago = metodoPago; }
+
+    public String getNumeroPedido() { return numeroPedido; }
+    public void setNumeroPedido(String numeroPedido) { this.numeroPedido = numeroPedido; }
+
+    public String getDireccionEntrega() { return direccionEntrega; }
+    public void setDireccionEntrega(String direccionEntrega) { this.direccionEntrega = direccionEntrega; }
 }

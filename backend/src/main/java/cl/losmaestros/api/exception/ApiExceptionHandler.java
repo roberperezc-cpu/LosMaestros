@@ -27,6 +27,11 @@ public class ApiExceptionHandler {
         return respuesta(HttpStatus.CONFLICT, ex.getMessage(), null);
     }
 
+    @ExceptionHandler(SolicitudInvalidaException.class)
+    public ResponseEntity<Map<String, Object>> solicitudInvalida(SolicitudInvalidaException ex) {
+        return respuesta(HttpStatus.BAD_REQUEST, ex.getMessage(), null);
+    }
+
     @ExceptionHandler(CredencialesInvalidasException.class)
     public ResponseEntity<Map<String, Object>> credencialesInvalidas(CredencialesInvalidasException ex) {
         return respuesta(HttpStatus.UNAUTHORIZED, ex.getMessage(), null);

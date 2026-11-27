@@ -200,6 +200,58 @@ Authorization: Bearer {{token}}
 DELETE {{base}}/ventas/1
 Authorization: Bearer {{token}}
 
+############ PEDIDOS (checkout; requiere un token de CLIENTE) ############
+
+### Iniciar sesión como cliente (el contratista de ejemplo tiene ficha de cliente)
+# @name loginCliente
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "correo": "contratista@losmaestros.cl",
+  "password": "Maestro123"
+}
+
+###
+@tokenCliente = {{loginCliente.response.body.token}}
+
+### Confirmar una compra: descuenta el stock y crea una venta por producto
+POST {{base}}/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "tipoEntrega": "despacho",
+  "metodoPago": "transferencia",
+  "direccionEntrega": "Av. del Mar 1234, La Serena",
+  "items": [
+    { "productoId": "MAT-CEM-001", "cantidad": 2 },
+    { "productoId": "ELE-CAB-002", "cantidad": 1 }
+  ]
+}
+
+### Pedir más unidades de las que hay -> 409 (no se descuenta nada)
+POST {{base}}/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "tipoEntrega": "retiro",
+  "metodoPago": "efectivo",
+  "items": [ { "productoId": "HER-TAL-042", "cantidad": 999 } ]
+}
+
+### El ADMIN no tiene ficha de cliente -> 400
+POST {{base}}/pedidos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "tipoEntrega": "retiro",
+  "metodoPago": "efectivo",
+  "items": [ { "productoId": "MAT-CEM-001", "cantidad": 1 } ]
+}
+
 ############ ERRORES ############
 
 ### Clientes sin token -> 401

@@ -3,10 +3,12 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import CampoValidado from '../molecules/CampoValidado'
 import CamposRegionComuna from '../molecules/CamposRegionComuna'
+import Notificacion from '../molecules/Notificacion'
 import tiposEntrega from '../../data/tiposEntrega'
 import metodosPago from '../../data/metodosPago'
 import { validarCheckout } from '../../utils/validaciones'
 import { obtenerSesion } from '../../utils/sesion'
+import { mensajeDeError } from '../../utils/errores'
 
 function FormularioCheckout({ onConfirmar }) {
   // Si hay sesión iniciada, se precargan los datos del usuario.
@@ -26,6 +28,8 @@ function FormularioCheckout({ onConfirmar }) {
     metodoPago: '',
   })
   const [errores, setErrores] = useState({})
+  const [errorServidor, setErrorServidor] = useState('')
+  const [enviando, setEnviando] = useState(false)
 
   const manejarCambio = (event) => {
     const { name, value } = event.target
@@ -37,19 +41,30 @@ function FormularioCheckout({ onConfirmar }) {
     })
   }
 
-  const manejarSubmit = (event) => {
+  // onConfirmar devuelve una promesa: si el servidor rechaza la compra (stock insuficiente,
+  // sesión vencida...) se muestra el motivo y el carrito queda como estaba.
+  const manejarSubmit = async (event) => {
     event.preventDefault()
+    setErrorServidor('')
 
     const nuevosErrores = validarCheckout(formulario)
     setErrores(nuevosErrores)
     if (Object.keys(nuevosErrores).length > 0) return
 
-    onConfirmar(formulario)
+    setEnviando(true)
+    try {
+      await onConfirmar(formulario)
+    } catch (error) {
+      setErrorServidor(mensajeDeError(error))
+      setEnviando(false)
+    }
   }
 
   return (
     <Form noValidate onSubmit={manejarSubmit}>
       <h3>Datos de entrega y pago</h3>
+
+      {errorServidor && <Notificacion tipo="danger">{errorServidor}</Notificacion>}
 
       <CampoValidado
         id="nombre"
@@ -132,7 +147,7 @@ function FormularioCheckout({ onConfirmar }) {
         ))}
       </CampoValidado>
 
-      <Button type="submit" variant="primary" className="btn-block">
+      <Button type="submit" variant="primary" className="btn-block" disabled={enviando}>
         Confirmar Compra
       </Button>
     </Form>

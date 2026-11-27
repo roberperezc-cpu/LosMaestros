@@ -76,4 +76,24 @@ describe('FormularioCheckout', () => {
     expect(screen.getByLabelText('Nombre completo:')).toHaveValue('Constructora Elqui')
     expect(screen.getByLabelText('RUT:')).toHaveValue('12.345.678-5')
   })
+
+  it('muestra el error del servidor y deja volver a intentar', async () => {
+    // Arrange
+    const onConfirmar = vi.fn().mockRejectedValue({
+      response: { status: 409, data: { mensaje: 'Stock insuficiente de "Taladro": quedan 1 unidades.' } },
+    })
+    render(<FormularioCheckout onConfirmar={onConfirmar} />)
+
+    // Act
+    escribir('Nombre completo:', 'Juan Pérez')
+    escribir('RUT:', '12.345.678-5')
+    escribir('Teléfono celular:', '+56 9 1234 5678')
+    escribir('Tipo de entrega:', 'retiro')
+    escribir('Método de pago:', 'transferencia')
+    enviar()
+
+    // Assert
+    expect(await screen.findByRole('alert')).toHaveTextContent('Stock insuficiente')
+    expect(screen.getByRole('button', { name: 'Confirmar Compra' })).toBeEnabled()
+  })
 })

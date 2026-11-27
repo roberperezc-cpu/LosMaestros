@@ -71,4 +71,8 @@ src/utils/      productosApi.js (adapta la respuesta HAL de la API), errores.js 
 contraseña cifrada) y la ficha del cliente (tabla `clientes`) en una sola operación, y devuelve el token JWT. Si el correo o el RUT ya
 existen, el servidor responde 409 y el formulario muestra el mensaje. Sin conexión con el backend no se puede crear una cuenta.
 
-Pendiente de integrar: el carrito y el descuento de stock en el checkout siguen siendo locales.
+**Checkout:** al confirmar la compra, el carrito se envía a `POST /api/pedidos` (requiere iniciar sesión como cliente). El servidor
+descuenta el stock y registra una venta por producto en MySQL, todo en una transacción: si un producto no tiene stock suficiente, no
+se descuenta nada y la interfaz muestra el motivo. Tras confirmar, el catálogo se vuelve a pedir a la API para mostrar el stock actual.
+
+Sigue siendo local: el carrito mientras se arma (se guarda en el navegador) y el punto de venta (`/pos`).

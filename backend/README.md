@@ -38,6 +38,7 @@ Las migraciones están en `src/main/resources/db/migration` y se aplican en orde
 | V1 | `V1__crear_tablas_base.sql` | Crea `productos`, `clientes` y `ventas` |
 | V2 | `V2__datos_iniciales.sql` | Carga 4 productos y 2 clientes de ejemplo |
 | V3 | `V3__crear_usuarios.sql` | Crea la tabla `usuarios` (JWT) |
+| V4 | `V4__pedidos.sql` | Agrega `numero_pedido` y `direccion_entrega` a `ventas` (checkout) |
 
 Flyway registra lo aplicado en la tabla `flyway_schema_history`. Un cambio futuro de la base se hace con una
 migración **nueva** (por ejemplo `V4__...sql`); las ya aplicadas no se modifican. Hibernate solo **valida**
@@ -66,6 +67,7 @@ Flujo: `POST /api/auth/login` devuelve un token → se envía en cada petición 
 | `GET /api/productos` y `GET /api/productos/{sku}` | Público (catálogo) |
 | `POST`, `PUT`, `DELETE /api/productos` | Solo ADMIN |
 | `GET`, `POST`, `PUT /api/clientes` y `/api/ventas` | Cualquier usuario con token |
+| `POST /api/pedidos` (checkout) | Cliente con token: descuenta el stock y registra las ventas en una transacción |
 | `DELETE /api/clientes/{id}` y `/api/ventas/{id}` | Solo ADMIN |
 
 Sin token responde **401**; con token pero sin permiso, **403**.
